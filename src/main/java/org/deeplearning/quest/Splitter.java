@@ -3,8 +3,10 @@ package org.deeplearning.quest;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Splitter<T> {
@@ -27,16 +29,8 @@ public class Splitter<T> {
     }
 
     public static <T> Splitter<T> splitBy(Collection<T> coll, Predicate<T> pred) {
-        List<T> passed = new LinkedList<>();
-        List<T> notPassed = new LinkedList<>();
-        coll.stream()
-            .forEach(x -> {
-                if (pred.test(x)) {
-                    passed.add(x);
-                } else {
-                    notPassed.add(x);
-                }
-            });
-        return new Splitter<>(passed, notPassed);
+        Map<Boolean, List<T>> map = coll.stream()
+                                        .collect(Collectors.partitioningBy(pred));
+        return new Splitter<>(map.get(true), map.get(false));
     }
 }
