@@ -2,7 +2,6 @@ package org.deeplearning.quest;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentMap;
-import java.util.stream.BaseStream;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -40,8 +39,8 @@ enum BlogPostType {
     GUIDE
 }
 
-class Tuple {
-    public Tuple(BlogPostType type, String author) {
+class BlogPostTuple {
+    public BlogPostTuple(BlogPostType type, String author) {
         this.type = type;
         this.author = author;
     }
@@ -83,8 +82,8 @@ public class PStream {
         Map<BlogPostType, List<BlogPost>> g1 = blogPosts.stream()
                                                         .collect(groupingBy(BlogPost::getType));
 
-        Map<Tuple, List<BlogPost>> g2 = blogPosts.stream()
-                                                 .collect(groupingBy(post -> new Tuple(post.getType(), post.getAuthor())));
+        Map<BlogPostTuple, List<BlogPost>> g2 = blogPosts.stream()
+                                                         .collect(groupingBy(post -> new BlogPostTuple(post.getType(), post.getAuthor())));
 
         // To group the List of BlogPosts first by author and then by type:
         Map<String, Map<BlogPostType, List<BlogPost>>> map = blogPosts.stream()
